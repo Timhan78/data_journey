@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timur Siraziev | Learning Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2d3148;
+    --text: #e8eaf0;
+    --text-muted: #7c82a0;
+    --accent: #4f8ef7;
+    --green: #34d399;
+    --red: #f87171;
+    --yellow: #fbbf24;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 100;
+  }
+
+  .nav-brand {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    padding: 16px 0;
+    margin-right: 32px;
+    letter-spacing: 0.05em;
+  }
+
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+  }
+
+  .nav-tab {
+    padding: 16px 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+    border: none;
+    background: none;
+    font-family: var(--sans);
+  }
+
+  .nav-tab:hover { color: var(--text); }
+  .nav-tab.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
+
+  /* PAGES */
+  .page { display: none; padding: 32px 24px; max-width: 1100px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* HERO */
+  .hero {
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .hero h1 {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .hero p {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 600px;
+  }
+
+  /* COUNTERS */
+  .counters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .counter-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+  }
+
+  .counter-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  .counter-value {
+    font-size: 32px;
+    font-weight: 700;
+    font-family: var(--mono);
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .counter-btn {
+    display: flex;
+    gap: 6px;
+  }
+
+  .btn-sm {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--mono);
+  }
+
+  .btn-sm:hover { background: var(--border); }
+
+  /* SECTION TITLES */
+  .section-title {
+    font-size: 12px;
+    font-family: var(--mono);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+
+  /* CHECKLIST */
+  .checklist {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+
+  .checklist-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .checklist-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .checklist-progress {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--green);
+  }
+
+  .check-item {
+    padding: 14px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+
+  .check-item:last-child { border-bottom: none; }
+  .check-item:hover { background: var(--surface2); }
+  .check-item.done { opacity: 0.6; }
+
+  .check-box {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .check-item.done .check-box {
+    background: var(--green);
+    border-color: var(--green);
+  }
+
+  .check-tick { display: none; font-size: 11px; color: white; font-weight: 700; }
+  .check-item.done .check-tick { display: block; }
+
+  .check-text {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  .check-item.done .check-text {
+    text-decoration: line-through;
+    color: var(--text-muted);
+  }
+
+  .check-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-left: 8px;
+    background: var(--surface2);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  /* MONTHLY PROGRESS */
+  .months-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .month-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  .month-card.current { border-color: var(--accent); }
+
+  .month-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .month-name {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .month-focus {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: var(--mono);
+  }
+
+  .month-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-family: var(--mono);
+  }
+
+  .badge-current { background: rgba(79,142,247,0.15); color: var(--accent); }
+  .badge-done { background: rgba(52,211,153,0.15); color: var(--green); }
+  .badge-upcoming { background: var(--surface2); color: var(--text-muted); }
+
+  .month-bar-bg {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+
+  .month-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--accent);
+    transition: width 0.3s;
+  }
+
+  .month-tasks { list-style: none; }
+
+  .month-task {
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 4px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .month-task:hover { color: var(--text); }
+
+  .month-task.done { text-decoration: line-through; color: var(--text-muted); opacity: 0.5; }
+
+  .task-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+
+  .month-task.done .task-dot { background: var(--green); }
+
+  /* JOURNAL */
+  .journal-form {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .journal-form-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-family: var(--sans);
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+
+  .input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .textarea {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-family: var(--sans);
+    width: 100%;
+    min-height: 100px;
+    resize: vertical;
+    transition: border-color 0.15s;
+    line-height: 1.6;
+  }
+
+  .textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-family: var(--sans);
+    cursor: pointer;
+    min-width: 140px;
+  }
+
+  .btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: var(--sans);
+    transition: opacity 0.15s;
+    white-space: nowrap;
+  }
+
+  .btn:hover { opacity: 0.85; }
+
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: var(--sans);
+    transition: all 0.15s;
+  }
+
+  .btn-outline:hover { border-color: var(--text-muted); color: var(--text); }
+
+  /* JOURNAL ENTRIES */
+  .entry {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .entry-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .entry-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .entry-tag {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    background: rgba(79,142,247,0.1);
+    color: var(--accent);
+    border: 1px solid rgba(79,142,247,0.2);
+  }
+
+  .entry-body {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    white-space: pre-wrap;
+  }
+
+  .entry-delete {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.15s;
+    line-height: 1;
+  }
+
+  .entry-delete:hover { color: var(--red); background: rgba(248,113,113,0.1); }
+
+  /* EMPTY STATE */
+  .empty {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--text-muted);
+  }
+
+  .empty-icon { font-size: 32px; margin-bottom: 12px; }
+  .empty-text { font-size: 13px; line-height: 1.6; }
+
+  /* STATS */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    font-family: var(--mono);
+    color: var(--green);
+  }
+
+  /* DAYS COUNTER */
+  .days-card {
+    background: linear-gradient(135deg, rgba(79,142,247,0.1), rgba(52,211,153,0.05));
+    border: 1px solid rgba(79,142,247,0.2);
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .days-number {
+    font-size: 64px;
+    font-weight: 700;
+    font-family: var(--mono);
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .days-label {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 20px; }
+    .counters { grid-template-columns: repeat(2, 1fr); }
+    .journal-form-row { flex-direction: column; }
+    .nav-tab { padding: 14px 12px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">ts.tracker</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('dashboard')">Dashboard</button>
+    <button class="nav-tab" onclick="showPage('plan')">Monthly Plan</button>
+    <button class="nav-tab" onclick="showPage('journal')">Journal</button>
+  </div>
+</nav>
+
+<!-- DASHBOARD -->
+<div id="page-dashboard" class="page active">
+
+  <div class="hero">
+    <div class="hero-label">Learning Tracker · 2026</div>
+    <h1>Timur Siraziev</h1>
+    <p>Transitioning from 25 years in broadcast journalism into humanitarian data analysis. Building skills to become a Humanitarian Data Storyteller.</p>
+  </div>
+
+  <!-- DAYS TO GRADUATION -->
+  <div class="days-card">
+    <div class="days-number" id="days-count">—</div>
+    <div class="days-label">days until Level 4 graduation · December 2026</div>
+  </div>
+
+  <!-- COUNTERS -->
+  <p class="section-title" style="margin-bottom:16px">Weekly Progress</p>
+  <div class="counters">
+    <div class="counter-card">
+      <div class="counter-label">SQL Tasks</div>
+      <div class="counter-value" id="sql-count">0</div>
+      <div class="counter-btn">
+        <button class="btn-sm" onclick="updateCounter('sql',-1)">−</button>
+        <button class="btn-sm" onclick="updateCounter('sql',1)">+</button>
+      </div>
+    </div>
+    <div class="counter-card">
+      <div class="counter-label">Power BI Exercises</div>
+      <div class="counter-value" id="pbi-count">0</div>
+      <div class="counter-btn">
+        <button class="btn-sm" onclick="updateCounter('pbi',-1)">−</button>
+        <button class="btn-sm" onclick="updateCounter('pbi',1)">+</button>
+      </div>
+    </div>
+    <div class="counter-card">
+      <div class="counter-label">Job Applications</div>
+      <div class="counter-value" id="jobs-count">0</div>
+      <div class="counter-btn">
+        <button class="btn-sm" onclick="updateCounter('jobs',-1)">−</button>
+        <button class="btn-sm" onclick="updateCounter('jobs',1)">+</button>
+      </div>
+    </div>
+    <div class="counter-card">
+      <div class="counter-label">Journal Entries</div>
+      <div class="counter-value" id="journal-count">0</div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <p class="section-title">October Readiness Checklist</p>
+  <div class="checklist">
+    <div class="checklist-header">
+      <span class="checklist-title">Skills I must have before applying</span>
+      <span class="checklist-progress" id="checklist-progress">0 / 10</span>
+    </div>
+    <div id="checklist-items"></div>
+  </div>
+
+</div>
+
+<!-- MONTHLY PLAN -->
+<div id="page-plan" class="page">
+
+  <div class="hero">
+    <div class="hero-label">June → December 2026</div>
+    <h1>Monthly Plan</h1>
+    <p>Click any task to mark it complete. Each month builds toward the October readiness checkpoint.</p>
+  </div>
+
+  <div class="months-grid" id="months-grid"></div>
+
+</div>
+
+<!-- JOURNAL -->
+<div id="page-journal" class="page">
+
+  <div class="hero">
+    <div class="hero-label">Learning Journal</div>
+    <h1>Daily Notes</h1>
+    <p>Document what you learn, what's hard, and what clicks. Write in English — it's practice too.</p>
+  </div>
+
+  <div class="journal-form">
+    <div class="journal-form-row">
+      <input class="input" id="entry-title" placeholder="What did you work on today?" />
+      <select class="select" id="entry-tag">
+        <option value="SQL">SQL</option>
+        <option value="Power BI">Power BI</option>
+        <option value="Python">Python</option>
+        <option value="Excel">Excel</option>
+        <option value="Portfolio">Portfolio</option>
+        <option value="Interview Prep">Interview Prep</option>
+        <option value="Applications">Applications</option>
+        <option value="Reflection">Reflection</option>
+        <option value="EPA">EPA</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <textarea class="textarea" id="entry-body" placeholder="What did you learn? What was hard? What clicked? Write freely — this is your log."></textarea>
+    <div style="display:flex; gap:12px; margin-top:12px;">
+      <button class="btn" onclick="addEntry()">Add Entry</button>
+      <button class="btn-outline" onclick="exportData()">Export JSON</button>
+    </div>
+  </div>
+
+  <div id="journal-entries"></div>
+
+</div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────────────
+
+const CHECKLIST = [
+  { id:'c1', text:'SQL — write a JOIN + CTE query in 20 minutes without Google', tag:'SQL' },
+  { id:'c2', text:'SQL — solve medium-level tasks on StrataScratch without hints', tag:'SQL' },
+  { id:'c3', text:'Excel — clean a dirty file and build a Pivot Table in 60 minutes', tag:'Excel' },
+  { id:'c4', text:'Power BI — build a dashboard from a raw CSV in 2–3 hours', tag:'Power BI' },
+  { id:'c5', text:'Insights — write Observation → Meaning → Recommendation in 15 minutes', tag:'Analysis' },
+  { id:'c6', text:'Portfolio — explain the Grant Analysis project clearly in 2 minutes', tag:'Portfolio' },
+  { id:'c7', text:'Portfolio — two projects published on GitHub', tag:'Portfolio' },
+  { id:'c8', text:'STAR — 10 interview stories practised out loud', tag:'Interview' },
+  { id:'c9', text:'Emergency Response — 5 ER scenarios ready to describe', tag:'ER' },
+  { id:'c10', text:'CV — two versions ready (Data CV + Emergency Response CV)', tag:'CV' },
+];
+
+const MONTHS = [
+  {
+    id:'jun', name:'June 2026', focus:'SQL Foundation', badge:'current',
+    tasks:[
+      'Complete DataCamp SQL track (SELECT, WHERE, GROUP BY, HAVING)',
+      'Learn all JOIN types — understand INNER vs LEFT difference',
+      'Set up SQLiteOnline.com and write queries on real data',
+      'Draft 6–8 STAR stories from journalism and BRC work',
+    ]
+  },
+  {
+    id:'jul', name:'July 2026', focus:'SQL Interview Level', badge:'upcoming',
+    tasks:[
+      'Master CTE (WITH clause) — the £33k+ signal',
+      'Learn window functions: ROW_NUMBER, RANK, SUM OVER',
+      'Start StrataScratch — solve tasks tagged nonprofit or marketing',
+      'Complete 2 timed SQL tests (45 min, 5 tasks, no hints)',
+    ]
+  },
+  {
+    id:'aug', name:'August 2026', focus:'Power BI + Excel + HDX Project', badge:'upcoming',
+    tasks:[
+      'Complete 8–10 Workout Wednesday Power BI exercises',
+      'Build a star schema model with DAX measures',
+      'Clean a dirty Excel file with XLOOKUP + Pivot Table in 60 min',
+      'Complete Kaggle Pandas course — rewrite Grant Analysis without AI',
+      'Build HDX humanitarian project (Syria or Yemen dataset)',
+    ]
+  },
+  {
+    id:'sep', name:'September 2026', focus:'Full Simulation', badge:'upcoming',
+    tasks:[
+      'Complete 2 full timed technical tests (SQL + Excel + Power BI)',
+      'Complete 2 mock interviews',
+      'Practise all 10 STAR stories out loud — record yourself',
+      'Prepare 5 Emergency Response scenarios',
+      'Finalise two CVs: Data CV and Emergency Response CV',
+    ]
+  },
+  {
+    id:'oct', name:'October 2026', focus:'EPA + Applications', badge:'upcoming',
+    tasks:[
+      'Start EPA dashboard — BRC anonymised operational data',
+      'Send 5–8 strong targeted job applications',
+      'Maintain SQL practice: 30 min × 3 days/week on StrataScratch',
+      'Explain EPA project without breaching data confidentiality',
+    ]
+  },
+  {
+    id:'nov', name:'November 2026', focus:'Final Sprint', badge:'upcoming',
+    tasks:[
+      'Submit EPA — complete Level 4 apprenticeship',
+      'Active interview process — prepare for each one',
+      'Update LinkedIn with new qualification immediately',
+      'Continue one strong application per week',
+    ]
+  },
+  {
+    id:'dec', name:'December 2026', focus:'Graduation + Offer', badge:'upcoming',
+    tasks:[
+      'Receive Level 4 Data Analyst diploma from Imperial College London',
+      'Update CV and LinkedIn immediately',
+      'Secure job offer or active negotiation for January 2027 start',
+      'Ready to relocate to Glasgow',
+    ]
+  },
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+
+function load(key, def) {
+  try { return JSON.parse(localStorage.getItem(key)) ?? def; } catch { return def; }
+}
+
+function save(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
+}
+
+let checks     = load('ts_checks', {});
+let monthTasks = load('ts_month_tasks', {});
+let counters   = load('ts_counters', { sql:0, pbi:0, jobs:0 });
+let entries    = load('ts_entries', []);
+
+// ── DAYS COUNTER ──────────────────────────────────────────────────────────────
+
+function updateDays() {
+  const target = new Date('2026-12-31');
+  const today  = new Date();
+  const diff   = Math.ceil((target - today) / (1000*60*60*24));
+  document.getElementById('days-count').textContent = diff > 0 ? diff : 0;
+}
+
+// ── COUNTERS ──────────────────────────────────────────────────────────────────
+
+function updateCounter(key, delta) {
+  counters[key] = Math.max(0, (counters[key] || 0) + delta);
+  save('ts_counters', counters);
+  document.getElementById(key + '-count').textContent = counters[key];
+}
+
+function renderCounters() {
+  document.getElementById('sql-count').textContent   = counters.sql   || 0;
+  document.getElementById('pbi-count').textContent   = counters.pbi   || 0;
+  document.getElementById('jobs-count').textContent  = counters.jobs  || 0;
+  document.getElementById('journal-count').textContent = entries.length;
+}
+
+// ── CHECKLIST ─────────────────────────────────────────────────────────────────
+
+function renderChecklist() {
+  const container = document.getElementById('checklist-items');
+  container.innerHTML = '';
+  let done = 0;
+
+  CHECKLIST.forEach(item => {
+    const isDone = !!checks[item.id];
+    if (isDone) done++;
+
+    const div = document.createElement('div');
+    div.className = 'check-item' + (isDone ? ' done' : '');
+    div.onclick = () => toggleCheck(item.id);
+    div.innerHTML = `
+      <div class="check-box"><span class="check-tick">✓</span></div>
+      <div class="check-text">
+        ${item.text}
+        <span class="check-tag">${item.tag}</span>
+      </div>`;
+    container.appendChild(div);
+  });
+
+  document.getElementById('checklist-progress').textContent = `${done} / ${CHECKLIST.length}`;
+}
+
+function toggleCheck(id) {
+  checks[id] = !checks[id];
+  save('ts_checks', checks);
+  renderChecklist();
+}
+
+// ── MONTHLY PLAN ──────────────────────────────────────────────────────────────
+
+function renderMonths() {
+  const grid = document.getElementById('months-grid');
+  grid.innerHTML = '';
+
+  MONTHS.forEach(month => {
+    const tasks     = month.tasks;
+    const tasksDone = tasks.filter((_,i) => monthTasks[month.id + '_' + i]).length;
+    const pct       = tasks.length ? Math.round(tasksDone / tasks.length * 100) : 0;
+
+    const badgeClass = month.badge === 'current' ? 'badge-current'
+                     : month.badge === 'done'    ? 'badge-done'
+                     : 'badge-upcoming';
+    const badgeText  = month.badge === 'current' ? 'Now'
+                     : month.badge === 'done'    ? 'Complete'
+                     : 'Upcoming';
+
+    const taskHTML = tasks.map((t,i) => {
+      const key    = month.id + '_' + i;
+      const isDone = !!monthTasks[key];
+      return `<li class="month-task ${isDone ? 'done' : ''}" onclick="toggleMonthTask('${month.id}',${i})">
+        <span class="task-dot"></span>${t}
+      </li>`;
+    }).join('');
+
+    const card = document.createElement('div');
+    card.className = 'month-card' + (month.badge === 'current' ? ' current' : '');
+    card.innerHTML = `
+      <div class="month-header">
+        <div>
+          <div class="month-name">${month.name}</div>
+          <div class="month-focus">${month.focus}</div>
+        </div>
+        <span class="month-badge ${badgeClass}">${badgeText}</span>
+      </div>
+      <div class="month-bar-bg">
+        <div class="month-bar-fill" style="width:${pct}%"></div>
+      </div>
+      <ul class="month-tasks">${taskHTML}</ul>`;
+    grid.appendChild(card);
+  });
+}
+
+function toggleMonthTask(monthId, idx) {
+  const key = monthId + '_' + idx;
+  monthTasks[key] = !monthTasks[key];
+  save('ts_month_tasks', monthTasks);
+  renderMonths();
+}
+
+// ── JOURNAL ───────────────────────────────────────────────────────────────────
+
+function addEntry() {
+  const title = document.getElementById('entry-title').value.trim();
+  const body  = document.getElementById('entry-body').value.trim();
+  const tag   = document.getElementById('entry-tag').value;
+
+  if (!title || !body) return;
+
+  const entry = {
+    id:    Date.now(),
+    date:  new Date().toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }),
+    title, body, tag
+  };
+
+  entries.unshift(entry);
+  save('ts_entries', entries);
+
+  document.getElementById('entry-title').value = '';
+  document.getElementById('entry-body').value  = '';
+
+  renderEntries();
+  renderCounters();
+}
+
+function deleteEntry(id) {
+  entries = entries.filter(e => e.id !== id);
+  save('ts_entries', entries);
+  renderEntries();
+  renderCounters();
+}
+
+function renderEntries() {
+  const container = document.getElementById('journal-entries');
+
+  if (!entries.length) {
+    container.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">📓</div>
+        <div class="empty-text">No entries yet.<br>Write your first note above — what did you learn today?</div>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = entries.map(e => `
+    <div class="entry">
+      <div class="entry-header">
+        <div>
+          <div class="entry-title">${e.title}</div>
+          <div class="entry-meta">
+            <span>${e.date}</span>
+            <span class="entry-tag">${e.tag}</span>
+          </div>
+        </div>
+        <button class="entry-delete" onclick="deleteEntry(${e.id})" title="Delete">×</button>
+      </div>
+      <div class="entry-body">${e.body}</div>
+    </div>`).join('');
+}
+
+// ── EXPORT ────────────────────────────────────────────────────────────────────
+
+function exportData() {
+  const data = { counters, checks, monthTasks, entries, exported: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type:'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = 'timur-tracker-backup.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── NAV ───────────────────────────────────────────────────────────────────────
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+
+updateDays();
+renderCounters();
+renderChecklist();
+renderMonths();
+renderEntries();
+</script>
+</body>
+</html>
