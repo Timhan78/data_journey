@@ -65,7 +65,7 @@ I believe that how you learn is as important as what you learn. This tracker kee
 
 1. Download `index.html`
 2. Open in any browser
-3. Or visit the live version: [timursiraziev.github.io/learning-tracker](https://timursiraziev.github.io/learning-tracker)
+3. Or visit the live version: [timursiraziev.github.io/learning-tracker](https://timhan78.github.io/data_journey)
 
 ## Background
 
